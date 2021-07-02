@@ -7,7 +7,7 @@ const appId = process.env.APP_ID;
 const appKey = process.env.APP_KEY;
 
 const getLinies = async () => {
-  const response = await fetch(`${urlApi}app_id=${appId}&app_key=${appKey}`);
+  const response = await fetch(`${urlApi}?app_id=${appId}&app_key=${appKey}`);
   if (response) {
     const { features: linies } = await response.json();
     return linies.map(({ properties }) => properties);
