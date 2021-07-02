@@ -13,12 +13,15 @@ const getLinies = async () => {
     return linies.map(({ properties }) => properties);
   } else {
     console.log("Error de connexión");
-    process.exit(1);
+    return -1;
   }
 };
 
-const existeixLinia = async (linia, errores, color) => {
+const existeixLinia = async (linia, errors, color) => {
   const linies = await getLinies();
+  if (linies === -1) {
+    return;
+  }
   const propietatsLinia = await linies.filter(
     (liniaMetro) => liniaMetro.NOM_LINIA.toLowerCase() === linia.toLowerCase()
   )[0];
@@ -26,9 +29,11 @@ const existeixLinia = async (linia, errores, color) => {
   const missatge = `Nombre de la línea: ${propietatsLinia.NOM_LINIA}\nDescripción: ${propietatsLinia.DESC_LINIA}`;
   if (propietatsLinia && color) {
     console.log(chalk.hex(color)(missatge));
+    return propietatsLinia.CODI_LINIA;
   } else if (propietatsLinia && !color) {
     console.log(chalk.hex(colorLinia)(missatge));
-  } else if (errores) {
+    return propietatsLinia.CODI_LINIA;
+  } else if (errors) {
     console.log(chalk.red.bold("La línea no existe"));
     process.exit(0);
   } else {
