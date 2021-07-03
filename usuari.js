@@ -1,4 +1,6 @@
 const inquirer = require("inquirer");
+const { existeixLinia } = require("./existeixLinia");
+const { imprimirParades } = require("./imprimirParades");
 
 const preguntarUsuario = async () => {
   const respuestas = await inquirer.prompt([
@@ -25,11 +27,11 @@ const preguntarUsuario = async () => {
       choices: [
         {
           name: "Coordenadas",
-          value: "Coordenadas",
+          value: true,
         },
         {
           name: "Fecha de inauguración",
-          value: "inauguracion",
+          value: true,
         },
       ],
     },
@@ -41,16 +43,16 @@ const preguntarUsuario = async () => {
       choices: [
         {
           name: "Si",
-          value: "Si",
+          value: true,
         },
         {
           name: "No",
-          value: "No",
+          value: false,
         },
       ],
     },
     {
-      type: "number",
+      type: "input",
       message: "¿Que línea quieres consultar?",
       name: "tipo_linea",
       when: (respuesta) => respuesta.tipo === "Metro",
@@ -86,6 +88,21 @@ const iniciar = async () => {
   switch (respuestas.tipo) {
     case "Bus":
       console.log("No hay buses disponibles");
+      process.exit(0);
+      break;
+    default:
+      respuestas.tipo = "Metro";
+      break;
   }
+  const codiLinia = await existeixLinia(
+    respuestas.tipo_linea,
+    respuestas.tipo_yes_no
+  );
+  await imprimirParades(
+    codiLinia,
+    false,
+    respuestas.info_parada[0],
+    respuestas.info_parada[1]
+  );
 };
 iniciar();

@@ -23,6 +23,7 @@ const imprimirParades = async (codiLinia, abrev, coordenades, data) => {
   if (parades === -1) {
     return;
   }
+  console.log("\nParadas:");
   const propietatsParades = parades.map((parada) => parada);
   if (abrev) {
     propietatsParades.map((parada) =>
@@ -30,12 +31,14 @@ const imprimirParades = async (codiLinia, abrev, coordenades, data) => {
     );
   } else {
     for (const parada of parades) {
-      console.log(parada.properties.NOM_ESTACIO);
+      console.log(`\n${parada.properties.NOM_ESTACIO}`);
       if (coordenades) {
-        console.log(parada.geometry.coordinates);
+        console.log(`Coordenadas: ${parada.geometry.coordinates}`);
       }
       if (data) {
-        console.log(parada.properties.DATA_INAUGURACIO);
+        console.log(
+          `Fecha de inauguración: ${parada.properties.DATA_INAUGURACIO}`
+        );
       }
     }
   }
