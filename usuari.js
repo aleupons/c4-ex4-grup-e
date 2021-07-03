@@ -1,6 +1,4 @@
 const inquirer = require("inquirer");
-const { existeixLinia } = require("./existeixLinia");
-const { imprimirParades } = require("./imprimirParades");
 
 const preguntarUsuario = async () => {
   const respuestas = await inquirer.prompt([
@@ -83,26 +81,6 @@ const preguntarUsuario = async () => {
   return respuestas;
 };
 
-const iniciar = async () => {
-  const respuestas = await preguntarUsuario();
-  switch (respuestas.tipo) {
-    case "Bus":
-      console.log("No hay buses disponibles");
-      process.exit(0);
-      break;
-    default:
-      respuestas.tipo = "Metro";
-      break;
-  }
-  const codiLinia = await existeixLinia(
-    respuestas.tipo_linea,
-    respuestas.tipo_yes_no
-  );
-  await imprimirParades(
-    codiLinia,
-    false,
-    respuestas.info_parada[0],
-    respuestas.info_parada[1]
-  );
+module.exports = {
+  preguntarUsuario,
 };
-iniciar();
