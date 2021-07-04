@@ -14,6 +14,13 @@ program.parse(process.argv);
 const { color, abrev } = program.opts();
 const abreviacion = !!abrev;
 
+if (color !== undefined) {
+  if (color[0] !== "#" || color.length !== 7) {
+    console.log("El numero se ha de escribir de forma exagesimal: #······");
+    process.exit(1);
+  }
+}
+
 const getParades = async (codiLinia) => {
   const response = await fetch(
     `${urlApi}${codiLinia}/estacions/?app_id=${appId}&app_key=${appKey}`
@@ -44,7 +51,7 @@ const imprimirParades = async (codiLinia, coordenades, data) => {
     );
   } else {
     for (const parada of parades) {
-      console.log(chalk.hex(`#${color}`)(`\n${parada.properties.NOM_ESTACIO}`));
+      console.log(chalk.hex(`${color}`)(`\n${parada.properties.NOM_ESTACIO}`));
       if (coordenades) {
         console.log(
           chalk.hex(`${color}`)(`Coordenadas: ${parada.geometry.coordinates}`)
