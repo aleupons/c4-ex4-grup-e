@@ -1,9 +1,18 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
+const chalk = require("chalk");
+const { program } = require("commander");
 
 const urlApi = process.env.URL_API;
 const appId = process.env.APP_ID;
 const appKey = process.env.APP_KEY;
+
+program
+  .option("--color <colorPedido>", "Un color exagesimal")
+  .option("--abrev", "abrevia los nombres");
+program.parse(process.argv);
+const { color, abrev } = program.opts();
+const abreviacion = !!abrev;
 
 const getParades = async (codiLinia) => {
   const response = await fetch(
@@ -18,26 +27,34 @@ const getParades = async (codiLinia) => {
   }
 };
 
-const imprimirParades = async (codiLinia, abrev, coordenades, data) => {
+const imprimirParades = async (codiLinia, coordenades, data) => {
   const parades = await getParades(codiLinia);
   if (parades === -1) {
     return;
   }
-  console.log("\nParadas:");
+  console.log(chalk.hex(`${color}`)("\nParadas:"));
   const propietatsParades = parades.map((parada) => parada);
-  if (abrev) {
+  if (abreviacion) {
     propietatsParades.map((parada) =>
-      console.log(`${parada.properties.NOM_ESTACIO.substring(0, 3)}.`)
+      console.log(
+        chalk.hex(`${color}`)(
+          `${parada.properties.NOM_ESTACIO.substring(0, 3)}.`
+        )
+      )
     );
   } else {
     for (const parada of parades) {
-      console.log(`\n${parada.properties.NOM_ESTACIO}`);
+      console.log(chalk.hex(`#${color}`)(`\n${parada.properties.NOM_ESTACIO}`));
       if (coordenades) {
-        console.log(`Coordenadas: ${parada.geometry.coordinates}`);
+        console.log(
+          chalk.hex(`${color}`)(`Coordenadas: ${parada.geometry.coordinates}`)
+        );
       }
       if (data) {
         console.log(
-          `Fecha de inauguración: ${parada.properties.DATA_INAUGURACIO}`
+          chalk.hex(`${color}`)(
+            `Fecha de inauguración: ${parada.properties.DATA_INAUGURACIO}`
+          )
         );
       }
     }
