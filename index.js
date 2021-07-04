@@ -1,3 +1,5 @@
+const chalk = require("chalk");
+
 const { preguntarUsuario } = require("./usuari");
 const { existeixLinia } = require("./existeixLinia");
 const { imprimirParades } = require("./imprimirParades");
@@ -6,7 +8,11 @@ const iniciar = async () => {
   const respuestas = await preguntarUsuario();
   switch (respuestas.tipo) {
     case "Bus":
-      console.log("No hay buses disponibles");
+      console.log(
+        chalk.yellow(
+          "No tenemos informacion disponible de los buses \n www.tmb.cat"
+        )
+      );
       process.exit(0);
       break;
     default:
